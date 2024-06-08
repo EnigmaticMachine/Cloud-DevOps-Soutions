@@ -1,0 +1,14 @@
+FROM debian:latest
+
+# Install dependencies and Salt Master
+RUN apt-get update && apt-get install -y curl \
+    && curl -o bootstrap-salt.sh -L https://bootstrap.saltproject.io \
+    && chmod +x bootstrap-salt.sh \
+    && ./bootstrap-salt.sh -M -N \
+    && rm -f bootstrap-salt.sh \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+EXPOSE 4505 4506
+
+CMD ["salt-master", "-l", "debug"]

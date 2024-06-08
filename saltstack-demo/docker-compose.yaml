@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  salt-master:
+    image: debian:12
+    container_name: salt-master
+    hostname: salt-master
+    networks:
+      - salt-network
+    volumes:
+      - salt-master-data:/var/lib/salt
+    tty: true
+    stdin_open: true
+
+  salt-minion:
+    image: debian:12
+    container_name: salt-minion
+    hostname: salt-minion
+    networks:
+      - salt-network
+    depends_on:
+      - salt-master
+    volumes:
+      - salt-minion-data:/var/lib/salt
+    tty: true
+    stdin_open: true
+
+networks:
+  salt-network:
+    driver: bridge
+
+volumes:
+  salt-master-data:
+  salt-minion-data:
